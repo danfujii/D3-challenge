@@ -39,26 +39,32 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
     data.obesity = +data.obesity;
   });
 
+  // x function
   var xLinearScale = d3.scaleLinear()
     .domain([d3.min(stateData, d => d.healthcare)*.8,
         d3.max(stateData, d => d.healthcare)*1.1])
     .range([0, chartWidth]);
+  // y function  
   var yLinearScale = d3.scaleLinear()
     .domain([0, d3.max(stateData, d => d.obesity)*1.1])
     .range([chartHeight, 0]);
-
+  
+  // set axes  
   var bottomAxis = d3.axisBottom(xLinearScale);
   var leftAxis = d3.axisLeft(yLinearScale);
-
+  
+  // x axis
   chartGroup.append('g')
         .classed('x-axis', true)
         .attr('transform', `translate(0, ${chartHeight})`)
         .call(bottomAxis);
-
+  
+  // y axis      
   chartGroup.append('g')
         .classed('y-axis', true)
         .call(leftAxis);
-
+  
+  // chart circles      
   chartGroup.selectAll('circle')
         .data(stateData)
         .enter()
@@ -69,6 +75,7 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
         .attr('fill', 'green')
         .attr('opacity', .7);
 
+  // add text to circles      
   chartGroup.selectAll('text.text-circles')
         .data(stateData)
         .enter()
@@ -81,6 +88,7 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
         .attr('text-anchor', 'middle')
         .attr('fill', 'yellow');
 
+  // y axis      
   chartGroup.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('y', 30 - chartMargin.left)
@@ -89,6 +97,7 @@ d3.csv("assets/data/data.csv").then(function(stateData) {
         .classed('active', true)
         .text('Lacks Healthcare (%)');
 
+    // x axis    
     chartGroup.append('text')
         .attr('y', chartHeight + chartMargin.bottom / 2 - 10)
         .attr('x', chartWidth / 2)
